@@ -3,21 +3,21 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.10
-  - rdkit
-  - pandas
-  - numpy
-  - scipy
-  - scikit-learn
-  - biopython
+  - python=3.10.20
+  - rdkit=2026.03.2
+  - pandas=2.3.3
+  - numpy=2.2.6
+  - scipy=1.15.2
+  - scikit-learn=1.7.2
+  - biopython=1.87
   - pip
   - pip:
       - --extra-index-url https://download.pytorch.org/whl/cpu
       - torch==2.4.0
       - --find-links https://data.pyg.org/whl/torch-2.4.0+cpu.html
-      - torch_scatter
-      - torch_sparse
-      - torch_cluster
-      - torch_geometric
-      - e3nn
-      - pdb2pqr
+      - torch_scatter==2.1.2
+      - torch_sparse==0.6.18
+      - torch_cluster==1.6.3
+      - torch_geometric==2.7.0
+      - e3nn==0.6.0
+      - pdb2pqr==3.6.2
