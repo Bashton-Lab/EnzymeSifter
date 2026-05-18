@@ -11,7 +11,6 @@ A two-stage Snakemake pipeline for sifting through protein sequences and identif
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#Usage)
-- [External tools](#external-tools)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
 
@@ -125,6 +124,8 @@ Usage: ./run_stage2.sh /path/to/pdbs [filter options] [clade options]
 ```bash
 ./run_stage2.sh ~/trypsin_pdbs/ -solubility 0.6 -tm 55 -phopt 7:9 -topt 30:45 -clades 11
 ```
+
+See tutorial for complete features of the pipeline
 
 ---
 
