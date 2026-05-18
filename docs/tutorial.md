@@ -87,9 +87,47 @@ predictions_output/
  
 `clade_representatives.tsv` is the answer to "give me a structurally diverse shortlist of trypsins that satisfy my biophysical criteria". Each row reports the winning PDB for one clade, its combined score in `[0, 1]`, how many filter-passing enzymes were available in that clade (`n_eligible_in_clade`), how many total members the clade has (`n_members_in_clade`), and the predicted values for that enzyme. Clades with no passing members appear with `ID = NA`, so it tells you that no member of this clade passed the filters. 
 
-The coloured tree PNG with stars marking the clade representatives lives in `data/trees/`. A typical follow-up at this point is to open `data/trees/nj_tree_clades.png`, scan which clades produced winners and which didn't, and use that to decide whether your filters were too strict, whether to repeat Stage 2 with different filters, or whether the winners are ready for synthesis. The entire output of the first run is available at
+The coloured tree PNG with stars marking the clade representatives lives in `data/trees/`. A typical follow-up at this point is to open `data/trees/nj_tree_clades.png`, scan which clades produced winners and which didn't, and use that to decide whether your filters were too strict, whether to repeat Stage 2 with different filters, or whether the winners are ready for synthesis. The entire output of the test run is available at
 
 ---
+
+## Output structure
+```
+
+
+EnzymeSifter/
+├── data/
+│   ├── stage1/
+│   │   ├── nonredundant.fasta           # ← input to your structure predictor
+│   │   ├── clustering_report.tsv        # representative ↔ member mapping
+│   │   ├── motif_report.tsv             # per-seq motif hit positions
+│   │   ├── pfam_report.tsv              # per-seq Pfam hits
+│   │   └── ec_report.tsv                # CLEAN EC predictions
+│   ├── enzymm/
+│   │   ├── <pdb>.tsv                    # per-PDB EnzyMM output
+│   │   └── hit_pdbs.txt                 # PDBs with ≥1 enzymatic hit
+│   ├── sequences/
+│   │   ├── <pdb>.fasta                  # SEQRES-derived chain sequences
+│   │   └── all_hits.fasta               # merged FASTA for downstream tools
+│   ├── alignments/muscle.afa            # MUSCLE multiple-sequence alignment
+│   ├── trees/
+│   │   ├── nj_tree.nwk                  # Newick NJ tree (blosum62 distances)
+│   │   ├── nj_tree.png                  # plain tree render
+│   │   └── nj_tree_clades.png           # tree coloured by clade + ★ representatives
+│   ├── clades/clade_assignments.tsv     # tip_name ↔ clade_id
+│   └── predictions/
+│       ├── netsolp.tsv                  # raw NetSolP output
+│       ├── phoptnn.tsv                  # raw pHoptNN output
+│       ├── seq2topt_topt.tsv            # raw Seq2Topt output
+│       └── seq2topt_tm.tsv              # raw Seq2Tm output
+├── predictions_output/
+│   ├── all_predictions.tsv              # one row per PDB (single-chain case)
+│   ├── all_predictions_structure.tsv    # structure-level table (multi-chain case)
+│   ├── all_predictions_chains.tsv       # per-chain table (multi-chain case)
+│   ├── *_filtered.tsv                   # threshold-passing subsets
+│   └── clade_representatives.tsv        # one best enzyme per clade
+└── logs/                                # per-rule stderr captures
+```
  
 ## Stage 1 options reference
  
