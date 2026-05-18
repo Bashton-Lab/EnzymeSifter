@@ -1,27 +1,26 @@
 # EnzymeSifter tutorial
  
-This tutorial walks you through a complete, real EnzymeSifter run from start to finish and then documents every option available in both stages so you can adapt the workflow to your own project. The test run used in the published EnzymeSifter paper is demonstrated here as an example.
+This tutorial walks you through a complete, real EnzymeSifter run from start to finish and then documents the options available in both stages so you can adapt the workflow to your own project. The test run used in the published EnzymeSifter paper is demonstrated here as an example.
 
 ---
  
-## Table of contents
+## Contents
  
 - [Worked example: trypsins from soil samples](#worked-example-trypsins-from-soil-samples)
-  - [The starting material](#the-starting-material)
+  - [The starting material](#the-starting-sequences)
   - [Stage 1 — filtering sequences](#stage-1--filtering-sequences)
   - [Between the stages — structure prediction](#between-the-stages--structure-prediction)
   - [Stage 2 — predicting properties and picking clade champions](#stage-2--predicting-properties-and-picking-clade-champions)
   - [Reading the outputs](#reading-the-outputs)
 - [Stage 1 options reference](#stage-1-options-reference)
 - [Stage 2 options reference](#stage-2-options-reference)
-- [Tips for choosing parameter values](#tips-for-choosing-parameter-values)
 ---
  
 ## Worked example: trypsins from soil samples
  
-### The starting material
+### The starting sequences
  
-The input was a single multi-FASTA of **2,330,712 protein sequences** available at. Sequence headers were cut at the first (–) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
+The input was a single multi-FASTA of **2,330,712 protein sequences** available at. Sequence headers were cut at the first (–NODE-) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
  
 ```
 sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta > soil_proteins.fasta
@@ -29,10 +28,10 @@ sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta >
 ### Stage 1 — filtering sequences
  
 ```bash
-./run_stage1.sh ~/soil_proteins_renamed.fasta -residues GDSGGP -pfam PF00089 -identity 50
+./run_stage1.sh /PATH/TO/soil_proteins_renamed.fasta -residues GDSGGP -pfam PF00089 -identity 50
 ```
  
-- **`-residues GDSGGP`** keeps only sequences containing the literal six-residue motif `G-D-S-G-G-P`, A highly conserved motif in trypsins. This is a fast, high-specificity first sieve. The `-residues` flag accepts regular expressions, so you could write `G.SGGP` to allow any residue in position 2.
+- **`-residues GDSGGP`** keeps only sequences containing the literal six-residue motif `G-D-S-G-G-P`, a highly conserved motif in trypsins. This is a fast, high-specificity first sieve. The `-residues` flag accepts regular expressions, so you could write `G.SGGP` to allow any residue in position 2.
 - **`-pfam PF00089`** runs `hmmsearch` against Pfam HMM. The motif alone catches false positives that happen to contain the hexapeptide; requiring a Pfam Trypsin hit confirms the domain architecture.
 - **`-identity 50`** clusters the remaining sequences at 50% identity with MMseqs2 and keeps one representative per cluster.
 
@@ -41,12 +40,12 @@ Stage 1 acted as a funnel and reduced the number of sequences from > 2.3 million
 
 ### Between the stages — structure prediction
  
-Only the file extension (`.pdb`) and the presence of SEQRES records matter to Stage 2. After submitting our 122 sequences to AlphaFold server, the jobs were named as the headers but with a - instead of the dot, gene numbers were also removed from the job name as no duplicates remained in the filtered dataset. PDBs are available at 
+The file extension (`.pdb`) and the presence of SEQRES records matter to Stage 2. After submitting our 122 sequences to AlphaFold server, the jobs were named as the headers of the sequences but with a (-) instead of the (.) in the headers. Gene numbers were also removed from the job name as no duplicates remained in the filtered dataset. PDBs are available at 
 
 ### Stage 2 — structural features
  
 ```bash
-./run_stage2.sh ~/trypsin_pdbs/ -solubility 0.6 -tm 55 -phopt 7:9 -topt 30:45 -clades 11
+./run_stage2.sh /PATH/TO/pdbs/ -solubility 0.6 -tm 55 -phopt 7:9 -topt 30:45 -clades 11
 ```
  
 - **`-solubility 0.6`** NetSolP outputs solubility on a 0–1 scale.
@@ -63,7 +62,7 @@ After the run, `predictions_output/` contains three files:
 ```
 predictions_output/
 ├── all_predictions.tsv             # one row per PDB, all five predicted properties
-├── all_predictions_filtered.tsv    # subset that passed your -solubility/-tm/-phopt/-topt filters
+├── all_predictions_filtered.tsv    # subset that passed our -solubility/-tm/-phopt/-topt filters
 └── clade_representatives.tsv       # one winner per clade among the filtered enzymes
 ```
 
@@ -82,7 +81,7 @@ predictions_output/
 | `n_eligible_in_clade` | EnzymeSifter | How many single-sequence PDBs in this clade passed filters. |
 | `n_members_in_clade` | EnzymeSifter | Total tips in this clade. |
 
-`NA` indicates that a particular predictor could not score that enzyme (e.g. an excessively long sequence skipped by CLEAN's ESM-1b 1022-aa limit).
+`NA` indicates that a particular predictor could not score that enzyme (e.g. an excessively long sequence skipped by CLEAN's 1022-aa limit).
 
  
 `clade_representatives.tsv` is the answer to "give me a structurally diverse shortlist of trypsins that satisfy my biophysical criteria". Each row reports the winning PDB for one clade, its combined score in `[0, 1]`, how many filter-passing enzymes were available in that clade (`n_eligible_in_clade`), how many total members the clade has (`n_members_in_clade`), and the predicted values for that enzyme. Clades with no passing members appear with `ID = NA`, so it tells you that no member of this clade passed the filters. 
@@ -96,10 +95,10 @@ The coloured tree PNG with stars marking the clade representatives lives in `dat
 EnzymeSifter/
 ├── data/
 │   ├── stage1/
-│   │   ├── nonredundant.fasta           # ← input to your structure predictor
+│   │   ├── nonredundant.fasta           # ← filtered sequences for structure prediction
 │   │   ├── clustering_report.tsv        # representative ↔ member mapping
-│   │   ├── motif_report.tsv             # per-seq motif hit positions
-│   │   ├── pfam_report.tsv              # per-seq Pfam hits
+│   │   ├── motif_report.tsv             # per-sequence motif hit positions
+│   │   ├── pfam_report.tsv              # per-sequence Pfam hits
 │   │   └── ec_report.tsv                # CLEAN EC predictions
 │   ├── enzymm/
 │   │   ├── <pdb>.tsv                    # per-PDB EnzyMM output
@@ -109,8 +108,7 @@ EnzymeSifter/
 │   │   └── all_hits.fasta               # merged FASTA for downstream tools
 │   ├── alignments/muscle.afa            # MUSCLE multiple-sequence alignment
 │   ├── trees/
-│   │   ├── nj_tree.nwk                  # Newick NJ tree (blosum62 distances)
-│   │   ├── nj_tree.png                  # plain tree render
+│   │   ├── nj_tree.nwk                  # Newick NJ tree
 │   │   └── nj_tree_clades.png           # tree coloured by clade + ★ representatives
 │   ├── clades/clade_assignments.tsv     # tip_name ↔ clade_id
 │   └── predictions/
@@ -122,7 +120,7 @@ EnzymeSifter/
 │   ├── all_predictions.tsv              # one row per PDB (single-chain case)
 │   ├── all_predictions_structure.tsv    # structure-level table (multi-chain case)
 │   ├── all_predictions_chains.tsv       # per-chain table (multi-chain case)
-│   ├── *_filtered.tsv                   # threshold-passing subsets
+│   ├── *_filtered.tsv                   # Filters-passed subsets
 │   └── clade_representatives.tsv        # one best enzyme per clade
 └── logs/                                # per-rule stderr captures
 ```
