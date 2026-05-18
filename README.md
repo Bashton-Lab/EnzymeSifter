@@ -126,14 +126,6 @@ Usage: ./run_stage2.sh /path/to/pdbs [filter options] [clade options]
 ./run_stage2.sh ~/trypsin_pdbs/ -solubility 0.6 -tm 55 -phopt 7:9 -topt 30:45 -clades 11
 ```
 
-### First-run downloads
-
-- NetSolP-1.0 from DTU (~5.6 GB) into `external/NetSolP-1.0/`
-- pHoptNN cloned from GitHub into `external/pHoptNN/`
-- Seq2Topt cloned from GitHub + weight files into `external/Seq2Topt/`
-
-EnzyMM is installed as a pip package via `envs/enzymm.yaml`.
-
 ---
 
 ## Troubleshooting
