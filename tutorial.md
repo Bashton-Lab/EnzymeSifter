@@ -40,7 +40,7 @@ Stage 1 acted as a funnel and reduced the number of sequences from > 2.3 million
 
 ### Between the stages — structure prediction
  
-The file extension (`.pdb`) and the presence of SEQRES records matter to Stage 2. After submitting our 122 sequences to AlphaFold server, the jobs were named as the headers of the sequences but with a (-) instead of the (.) in the headers. Gene numbers were also removed from the job name as no duplicates remained in the filtered dataset. PDBs are available at 
+The file extension (`.pdb`) and the presence of SEQRES records matter to Stage 2. After submitting our 122 sequences to AlphaFold server, the jobs were named as the headers of the sequences but with a (-) instead of the (.) in the headers. Gene numbers were also removed from the job name as no duplicates remained in the filtered dataset. Predicted structures in PDB format are available in pdbs.tar.gz within the Zenodo deposit [https://doi.org/10.5281/zenodo.20237962](https://doi.org/10.5281/zenodo.20237962). Original AlphaFold Server output (CIF files) is in alphafold_predictions.tar.gz in the same deposit.
 
 ### Stage 2 — predicting properties and representatives
  
