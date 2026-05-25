@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
-"""
-Inputs:
-  --clades     TSV: tip_name, clade_id
-  --hit_list   text file with one pdb basename per line (used to
-               disambiguate single-chain PDBs whose filename ends in
-               _<digits>, e.g. 'zt2_1')
-  --filtered   TSV(s) of threshold-passing enzymes (no score column)
-  --output     Output TSV path
-  Filter specs (same syntax as filter_predictions.py; used for scoring):
-    --solubility, --usability, --phopt, --topt, --tm
-"""
-
 import argparse
 import csv
 import sys
