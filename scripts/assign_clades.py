@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-"""
-Assign tips of a Newick tree to k clades by cutting the k-1 longest
-internal branches (equivalently, binary-searching the smallest distance
-threshold that produces <= k clades).
-"""
-
 import argparse
 import sys
 from pathlib import Path
