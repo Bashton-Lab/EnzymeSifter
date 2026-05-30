@@ -87,6 +87,7 @@ predictions_output/
 
 `NA` indicates that a particular predictor could not score that enzyme (e.g. an excessively long sequence skipped by CLEAN's 1022-aa limit).
 
+NetSolP predictions in the pipeline exhibit small numerical variations at around 0.01 on average compared to the webserver and across CPU microarchitectures attributable to INT8 quantized ONNX kernel dis-patch.
  
 `clade_representatives.tsv` is the answer to "give me a structurally diverse shortlist of trypsins that satisfy my biophysical criteria". Each row reports the winning PDB for one clade, its combined score in `[0, 1]`, how many filter-passing enzymes were available in that clade (`n_eligible_in_clade`), how many total members the clade has (`n_members_in_clade`), and the predicted values for that enzyme. Clades with no passing members appear with `ID = NA`, so it tells you that no member of this clade passed the filters. 
 
@@ -218,7 +219,7 @@ Keep enzymes whose NetSolP-predicted solubility is ≥ `<min>`.
 #### `-usability <min>` *(cutoff only)*
  
 Keep enzymes whose NetSolP-predicted *usability* is ≥ `<min>`.
- 
+
 #### `-tm <value>` *(cutoff **or** interval)*
  
 The only flag that accepts both forms:
