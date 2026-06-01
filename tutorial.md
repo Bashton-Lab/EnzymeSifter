@@ -8,9 +8,9 @@ This tutorial walks you through a complete, real EnzymeSifter run from start to 
  
 - [Worked example: trypsins from soil samples](#worked-example-trypsins-from-soil-samples)
   - [The starting sequences](#the-starting-sequences)
-  - [Stage 1 — filtering sequences](#stage-1--filtering-sequences)
-  - [Between the stages — structure prediction](#between-the-stages--structure-prediction)
-  - [Stage 2 — predicting properties and representatives ](#stage-2--predicting-properties-and-representatives)
+  - [Stage 1 - filtering sequences](#stage-1--filtering-sequences)
+  - [Between the stages - structure prediction](#between-the-stages--structure-prediction)
+  - [Stage 2 - predicting properties and representatives ](#stage-2--predicting-properties-and-representatives)
   - [Reading the outputs](#reading-the-outputs)
 - [Stage 1 options reference](#stage-1-options-reference)
 - [Stage 2 options reference](#stage-2-options-reference)
@@ -20,12 +20,12 @@ This tutorial walks you through a complete, real EnzymeSifter run from start to 
  
 ### The starting sequences
  
-The input was a single multi-FASTA of **2,330,712 protein sequences** available at. After downloading and extracting the fasta file, sequence headers were cut at the first (–NODE-) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
+The input was a single multi-FASTA of **2,330,712 protein sequences** available at. After downloading and extracting the fasta file, sequence headers were cut at the first (-NODE-) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
  
 ```
 sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta > soil_proteins.fasta
 ```
-### Stage 1 — filtering sequences
+### Stage 1 - filtering sequences
  
 ```bash
 ./run_stage1.sh /path/to/soil_proteins_renamed.fasta -residues GDSGGP -pfam PF00089 -identity 50
@@ -38,7 +38,7 @@ sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta >
 Stage 1 acted as a funnel and reduced the number of sequences from > 2.3 million to 122 trypsins using the above identified filters.
 
 
-### Between the stages — structure prediction
+### Between the stages - structure prediction
  
 The file extension (`.pdb`) and the presence of SEQRES records matter to Stage 2. After submitting our 122 sequences to AlphaFold server, the jobs were named as the headers of the sequences but with a (-) instead of the (.) in the headers to follow the server instructions. Gene numbers were already removed from the headers of the filtered sequences as no duplicates remained in the filtered dataset. The output model_0 CIF file from each predicted structure was converted to the PDB format using GEMMI, without modifying the coordinates. Predicted structures in PDB format are available in pdbs.tar.gz within the Zenodo deposit [https://doi.org/10.5281/zenodo.20237962](https://doi.org/10.5281/zenodo.20237962). Original AlphaFold Server output is in alphafold_predictions.tar.gz in the same deposit. For the sake of testing the pipeline, the pdbs.tar.gz was downloaded and extracted with:
 
@@ -46,13 +46,13 @@ The file extension (`.pdb`) and the presence of SEQRES records matter to Stage 2
 tar -xzvf pdbs.tar.gz
 ```
 
-### Stage 2 — predicting properties and representatives
+### Stage 2 - predicting properties and representatives
  
 ```bash
 ./run_stage2.sh /path/to/pdbs/ -solubility 0.6 -tm 55 -phopt 7:9 -topt 30:45 -clades 11
 ```
  
-- **`-solubility 0.6`** NetSolP outputs solubility on a 0–1 scale.
+- **`-solubility 0.6`** NetSolP outputs solubility on a 0-1 scale.
 - **`-tm 55`** asks for predicted melting temperatures of at least 55 °C. Because we passed it as a single number (cutoff mode), the score for this property is normalised across the *passing* pool, so higher Tm is rewarded.
 - **`-phopt 7:9`** keeps enzymes whose predicted pH optimum sits in `[7, 9]`, with the scoring rubric most rewarding values near the midpoint (pH 8).
 - **`-topt 30:45`** Same logic as in pH optimum but for optimum temperature.
@@ -76,8 +76,8 @@ predictions_output/
 |---|---|---|
 | `ID` | PDB filename stem | Canonical identifier. |
 | `chain_id` | derived from SEQRES | Only present in the multi-chain table. |
-| `predicted_solubility` | NetSolP | 0–1, higher = more soluble. |
-| `predicted_usability` | NetSolP | 0–1, higher = more usable. |
+| `predicted_solubility` | NetSolP | 0-1, higher = more soluble. |
+| `predicted_usability` | NetSolP | 0-1, higher = more usable. |
 | `predicted_ph_opt` | pHoptNN | Predicted optimal pH. |
 | `predicted_topt_C` | Seq2Topt | Predicted optimum temperature, °C. |
 | `predicted_tm_C` | Seq2Tm | Predicted melting temperature, °C. |
@@ -201,9 +201,9 @@ The cheap filters run first so the expensive predictors only see sequences that 
 Usage: ./run_stage2.sh /path/to/pdbs [filter options] [clade options]
 ```
  
-`/path/to/pdbs` is **required** and must be a directory containing the `.pdb` files. The filename becomes the canonical `ID` downstream, so make sure filenames are descriptive and stable. Multi-chain PDBs are supported — Stage 2 will produce per-chain plus per-structure output tables automatically.
+`/path/to/pdbs` is **required** and must be a directory containing the `.pdb` files. The filename becomes the canonical `ID` downstream, so make sure filenames are descriptive and stable. Multi-chain PDBs are supported - Stage 2 will produce per-chain plus per-structure output tables automatically.
  
-If you pass no other flags, Stage 2 still runs all four property predictors plus EnzyMM, the MUSCLE alignment, and the NJ tree — it just doesn't filter or pick representatives.
+If you pass no other flags, Stage 2 still runs all four property predictors plus EnzyMM, the MUSCLE alignment, and the NJ tree - it just doesn't filter or pick representatives.
  
 ### Filter options
  
@@ -224,8 +224,8 @@ Keep enzymes whose NetSolP-predicted *usability* is ≥ `<min>`.
  
 The only flag that accepts both forms:
  
-- `-tm 40` — cutoff: keep enzymes with `Tm ≥ 55 °C`. Higher = better in the score.
-- `-tm 50:80` — interval: keep enzymes with `50 °C ≤ Tm ≤ 80 °C`. Closer to the midpoint (65 °C) = better in the score.
+- `-tm 40` - cutoff: keep enzymes with `Tm ≥ 55 °C`. Higher = better in the score.
+- `-tm 50:80` - interval: keep enzymes with `50 °C ≤ Tm ≤ 80 °C`. Closer to the midpoint (65 °C) = better in the score.
 Use the cutoff when "more thermostable is always better". Use the interval when you have an upper bound.
  
 #### `-topt <lo:hi>` *(interval only)*
@@ -245,14 +245,14 @@ Partition the NJ tree into `n` clades by binary-searching the smallest tip-dista
 - write `data/clades/clade_assignments.tsv` (one row per tip)
 - render `data/trees/nj_tree_clades.png` with tips coloured by clade
 - if filter options are also present, write `predictions_output/clade_representatives.tsv` containing the best-scoring filter-passing enzyme per clade, and overlay ★ markers on the tree at each representative
-The pipeline emits a warning if `n` clades can't be produced exactly — usually because the tree topology forces a slightly different cut.
+The pipeline emits a warning if `n` clades can't be produced exactly - usually because the tree topology forces a slightly different cut.
  
 ### How scoring works
  
 Whenever filter flags are given, every filter-passing enzyme receives a score in `[0, 1]` per specified property:
  
-- **Cutoff properties** (`solubility`, `usability`, `tm` in cutoff mode): score is the property's value normalised across the passing pool — `(value − pool_min) / (pool_max − pool_min)`. So `1.0` goes to the best enzyme in the pool.
-- **Interval properties** (`phopt`, `topt`, `tm` in interval mode): score is `1 − |value − midpoint| / half_width`, so being at the centre of the requested range = `1.0`, being at the edge = `0.0`.
+- **Cutoff properties** (`solubility`, `usability`, `tm` in cutoff mode): score is the property's value normalised across the passing pool - `(value - pool_min) / (pool_max - pool_min)`. So `1.0` goes to the best enzyme in the pool.
+- **Interval properties** (`phopt`, `topt`, `tm` in interval mode): score is `1 - |value - midpoint| / half_width`, so being at the centre of the requested range = `1.0`, being at the edge = `0.0`.
 The combined score is the arithmetic mean of the per-property scores across the user-specified properties, ignoring any property the predictor returned as `NA` for that enzyme. Multi-sequence PDBs (heteromeric assemblies) are excluded from representative selection because their per-chain scores can't be meaningfully averaged into a single structure-level value.
  
 ---
