@@ -8,9 +8,9 @@ This tutorial walks you through a complete, real EnzymeSifter run from start to 
  
 - [Worked example: trypsins from soil samples](#worked-example-trypsins-from-soil-samples)
   - [The starting sequences](#the-starting-sequences)
-  - [Stage 1 - filtering sequences](#stage-1--filtering-sequences)
-  - [Between the stages - structure prediction](#between-the-stages--structure-prediction)
-  - [Stage 2 - predicting properties and representatives ](#stage-2--predicting-properties-and-representatives)
+  - [Stage 1 - filtering sequences](#stage-1---filtering-sequences)
+  - [Between the stages - structure prediction](#between-the-stages---structure-prediction)
+  - [Stage 2 - predicting properties and representatives ](#stage-2---predicting-properties-and-representatives)
   - [Reading the outputs](#reading-the-outputs)
 - [Stage 1 options reference](#stage-1-options-reference)
 - [Stage 2 options reference](#stage-2-options-reference)
