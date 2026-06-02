@@ -19,9 +19,9 @@ A two-stage Snakemake pipeline for sifting through protein sequences and identif
 
 The pipeline runs in two stages with a structure-prediction step (carried out externally by the user). Users are free to choose any of the optional filters:
 
-1. **Stage 1 — filtering of sequences.** Filter by catalytic-residue motif, one or more Pfam families, and/or CLEAN-predicted EC number(s), then cluster at a user-defined identity threshold using MMseqs2.
+1. **Stage 1 - filtering of sequences.** Filter by catalytic-residue motif, one or more Pfam families, and/or CLEAN-predicted EC number(s), then cluster at a user-defined identity threshold using MMseqs2.
 2. **(User step) Structure prediction.** Generate PDB structures for Stage 1 filtered sequences.
-3. **Stage 2 — structural screening.** Confirm enzymatic activity with EnzyMM, predict solubility/usability (NetSolP), optimal pH (pHoptNN), and optimal/melting temperatures (Seq2Topt), build an NJ tree, optionally partition it into clades, and select the best-scoring representative per clade according to your filtering criteria.
+3. **Stage 2 - structural screening.** Confirm enzymatic activity with EnzyMM, predict solubility/usability (NetSolP), optimal pH (pHoptNN), and optimal/melting temperatures (Seq2Topt), build an NJ tree, optionally partition it into clades, and select the best-scoring representative per clade according to your filtering criteria.
 
 ---
 
