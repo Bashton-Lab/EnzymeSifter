@@ -1,6 +1,6 @@
 # EnzymeSifter
 
-A two-stage Snakemake pipeline for sifting through protein sequences and identifying promising enzyme candidates for downstream characterisation — from raw FASTA all the way to ranked, clade-representative enzymes annotated with predicted biochemical values.
+A two-stage Snakemake pipeline for sifting through protein sequences and identifying promising enzyme candidates for downstream characterisation from raw FASTA all the way to ranked, clade-representative enzymes annotated with predicted biochemical values.
 
 ---
 
@@ -108,7 +108,7 @@ On the first invocation of either stage, Snakemake will build all of the require
 ./run_stage1.sh ~/soil_proteins_renamed.fasta -residues GDSGGP -pfam PF00089 -identity 50
 ```
 
-### Between the stages — structure prediction
+### Between the stages - structure prediction
 
 Stage 2 needs a directory of PDB files of the filtered sequences.
 
