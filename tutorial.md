@@ -20,7 +20,7 @@ This tutorial walks you through a complete, real EnzymeSifter run from start to 
  
 ### The starting sequences
  
-The input was a single multi-FASTA of **2,330,712 protein sequences** available at [MGnify study MGYS00006548](https://www.ebi.ac.uk/metagenomics/studies/MGYS00006548). After downloading and extracting the fasta file, sequence headers were cut at the first (-NODE-) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
+The input was a single multi-FASTA of **2,330,712 protein sequences** available at [MGnify study MGYS00006774](https://www.ebi.ac.uk/metagenomics/studies/MGYS00006774). After downloading and extracting the fasta file, sequence headers were cut at the first (-NODE-) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
  
 ```
 sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta > soil_proteins.fasta
