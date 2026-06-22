@@ -28,19 +28,19 @@ sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta >
 ### Stage 1 - filtering sequences
  
 ```bash
-./run_stage1.sh /path/to/soil_proteins_renamed.fasta -residues GDSGGP -pfam PF00089 -identity 50
+./run_stage1.sh /path/to/soil_proteins_renamed.fasta -residues GDSGGP -pfam PF00089 -identity 90
 ```
  
 - **`-residues GDSGGP`** keeps only sequences containing the literal six-residue motif `G-D-S-G-G-P`, a highly conserved motif in trypsins. This is a fast, high-specificity first sieve. The `-residues` flag accepts regular expressions, so you could write `G.SGGP` to allow any residue in position 2.
 - **`-pfam PF00089`** runs `hmmsearch` against Pfam HMM. The motif alone catches false positives that happen to contain the hexapeptide; requiring a Pfam Trypsin hit confirms the domain architecture.
-- **`-identity 50`** clusters the remaining sequences at 50% identity with MMseqs2 and keeps one representative per cluster.
+- **`-identity 90`** clusters the remaining sequences at 90% identity with MMseqs2 and keeps one representative per cluster.
 
-Stage 1 acted as a funnel and reduced the number of sequences from > 2.3 million to 122 trypsins using the above identified filters.
+Stage 1 acted as a funnel and reduced the number of sequences from > 2.3 million to 166 trypsins using the above identified filters.
 
 
 ### Between the stages - structure prediction
  
-The file extension (.pdb) and a SEQRES records within it are required to Stage 2. Following submission of our 122 sequences to AlphaFold server, the jobs were named as the headers of the sequences (with a _ instead of the .). Gene numbers were already removed from the headers of the filtered sequences as no duplicates remained in the filtered dataset. The output model_0 CIF file from each predicted structure was converted to the PDB format using GEMMI, without modifying the coordinates. Predicted structures in PDB format are available in `pdbs.tar.gz` within the Zenodo deposit [https://doi.org/10.5281/zenodo.20237962](https://doi.org/10.5281/zenodo.20237962). Original AlphaFold Server output is in `alphafold_predictions.tar.gz` in the same deposit. For the sake of testing the pipeline, the `pdbs.tar.gz` was downloaded and extracted with::
+The file extension (.pdb) and a SEQRES records within it are required fot Stage 2. Following submission of our 166 sequences to AlphaFold server, the jobs were named as the headers of the sequences (with a _ instead of the .) to match the server instructions. Gene numbers were removed from the headers of the filtered sequences as no duplicates remained in the filtered dataset. The output model_0 CIF file from each predicted structure was converted to the PDB format using GEMMI, without modifying the coordinates. Predicted structures in PDB format are available in `pdbs.tar.gz` within the Zenodo deposit [https://doi.org/10.5281/zenodo.20237962](https://doi.org/10.5281/zenodo.20237962). Original AlphaFold Server output is in `alphafold_predictions.tar.gz` in the same deposit. For the sake of testing the pipeline, the `pdbs.tar.gz` was downloaded and extracted with::
 
 ```bash
 tar -xzvf pdbs.tar.gz
