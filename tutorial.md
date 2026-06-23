@@ -49,7 +49,7 @@ tar -xzvf pdbs.tar.gz
 ### Stage 2 - predicting properties and representatives
  
 ```bash
-./run_stage2.sh /path/to/pdbs/ -solubility 0.6 -tm 55 -phopt 7:9 -topt 30:45 -clades 11
+./run_stage2.sh /path/to/pdbs/ solubility 0.69 -phopt 7:10 -topt 30:45 -tm 55 -clades 13
 ```
  
 - **`-solubility 0.6`** NetSolP outputs solubility on a 0-1 scale.
