@@ -52,11 +52,11 @@ tar -xzvf pdbs.tar.gz
 ./run_stage2.sh /path/to/pdbs/ -solubility 0.69 -phopt 7:10 -topt 30:45 -tm 55 -clades 13
 ```
  
-- **`-solubility 0.6`** NetSolP outputs solubility on a 0-1 scale.
+- **`-solubility 0.69`** NetSolP outputs solubility on a 0-1 scale.
 - **`-tm 55`** asks for predicted melting temperatures of at least 55 °C. Because we passed it as a single number (cutoff mode), the score for this property is normalised across the *passing* pool, so higher Tm is rewarded.
-- **`-phopt 7:9`** keeps enzymes whose predicted pH optimum sits in `[7, 9]`, with the scoring rubric most rewarding values near the midpoint (pH 8).
+- **`-phopt 7:10`** keeps enzymes whose predicted pH optimum sits in `[7, 10]`, with the scoring rubric most rewarding values near the midpoint (pH 8.5).
 - **`-topt 30:45`** Same logic as in pH optimum but for optimum temperature.
-- **`-clades 11`** partitions the resulting NJ tree into 11 clades.
+- **`-clades 13`** partitions the resulting NJ tree into 13 clades.
 
  
 ### Reading the outputs
