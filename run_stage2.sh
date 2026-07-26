@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 usage() {
     cat <<EOF
 Usage: ./run_stage2.sh /path/to/pdbs [filter options] [clade options]
@@ -22,6 +24,10 @@ Clade options (optional):
                            predictions_output/clade_representatives.tsv
                            with the best-scoring enzyme per clade.
 
+Other options:
+  -threads <n>             Number of CPU cores to use.
+                           Default: all available cores ($(nproc)).
+
 Scoring (when filters are given):
   Each passing enzyme receives a score in [0, 1]:
     cutoff properties:   normalised across the passing pool (higher=better)
@@ -36,6 +42,7 @@ Examples:
   ./run_stage2.sh /data/pdbs -tm 50:80 -topt 35:42 -phopt 7:8
   ./run_stage2.sh /data/pdbs -clades 7
   ./run_stage2.sh /data/pdbs -usability 0.35 -tm 50:80 -topt 35:42 -clades 10
+  ./run_stage2.sh /data/pdbs -clades 7 -threads 8
 EOF
     exit 1
 }
@@ -54,6 +61,7 @@ FILTER_PHOPT=""
 FILTER_TOPT=""
 FILTER_TM=""
 CLADES=""
+THREADS="$(nproc)"
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -81,6 +89,10 @@ while [ $# -gt 0 ]; do
             [ -z "${2:-}" ] && echo "Error: -clades requires a value" && exit 1
             CLADES="$2"
             shift 2 ;;
+        -threads)
+            [ -z "${2:-}" ] && echo "Error: -threads requires a value" && exit 1
+            THREADS="$2"
+            shift 2 ;;
         *)
             echo "Unknown option: $1"
             usage ;;
@@ -95,5 +107,11 @@ CONFIG="pdb_dir=${PDB_DIR}"
 [ -n "$FILTER_TM" ]         && CONFIG+=" filter_tm=${FILTER_TM}"
 [ -n "$CLADES" ]            && CONFIG+=" clades=${CLADES}"
 
-snakemake --snakefile Snakefile_stage2 --config ${CONFIG} --use-conda -j "$(nproc)" \
-    --quiet rules progress
+# Ensure Snakemake is available. Auto-installs it into the 'enzymesifter'
+# conda environment on first run; sets $ENV_NAME for the call below.
+source "${SCRIPT_DIR}/scripts/ensure_snakemake.sh"
+
+conda run -n "${ENV_NAME}" --no-capture-output \
+    snakemake --snakefile Snakefile_stage2 --config ${CONFIG} \
+        --use-conda --conda-frontend conda -j "${THREADS}" \
+        --quiet rules progress

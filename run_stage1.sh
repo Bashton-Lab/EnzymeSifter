@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 usage() {
     cat <<EOF
 Usage: ./run_stage1.sh <input> [options]
@@ -37,6 +39,9 @@ Options:
                       (~few hundred MB) plus ESM-1b on first inference
                       (~7 GB to ~/.cache/torch).
 
+  -threads <n>        Number of CPU cores to use.
+                      Default: all available cores ($(nproc)).
+
 When combined, filters apply in this order:
   residues -> pfam -> ec -> identity clustering
 
@@ -44,6 +49,7 @@ Examples:
   ./run_stage1.sh seqs.fasta -pfam PF07519
   ./run_stage1.sh seqs.fasta -residues G.S.G -ec 3.13.1.8,2.5.1.94
   ./run_stage1.sh seqs.fasta -pfam PF07519 -ec 2.5.1.94 -identity 90
+  ./run_stage1.sh seqs.fasta -pfam PF07519 -threads 8
 
 
 Outputs:
@@ -67,6 +73,7 @@ IDENTITY=""
 RESIDUES=""
 PFAM=""
 EC=""
+THREADS="$(nproc)"
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -86,6 +93,10 @@ while [ $# -gt 0 ]; do
             [ -z "${2:-}" ] && echo "Error: -ec requires a value" && exit 1
             EC="$2"
             shift 2 ;;
+        -threads)
+            [ -z "${2:-}" ] && echo "Error: -threads requires a value" && exit 1
+            THREADS="$2"
+            shift 2 ;;
         *)
             echo "Unknown option: $1"
             usage ;;
@@ -98,5 +109,11 @@ CONFIG="input_fasta=${INPUT_FASTA}"
 [ -n "$PFAM" ]     && CONFIG+=" pfam=${PFAM}"
 [ -n "$EC" ]       && CONFIG+=" ec=${EC}"
 
-snakemake --snakefile Snakefile_stage1 --config ${CONFIG} --use-conda -j "$(nproc)" \
-    --quiet rules progress
+# Ensure Snakemake is available. Auto-installs it into the 'enzymesifter'
+# conda environment on first run; sets $ENV_NAME for the call below.
+source "${SCRIPT_DIR}/scripts/ensure_snakemake.sh"
+
+conda run -n "${ENV_NAME}" --no-capture-output \
+    snakemake --snakefile Snakefile_stage1 --config ${CONFIG} \
+        --use-conda --conda-frontend conda -j "${THREADS}" \
+        --quiet rules progress
