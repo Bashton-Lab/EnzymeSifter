@@ -19,12 +19,21 @@ This tutorial walks you through a complete, real EnzymeSifter run from start to 
 ## Worked example: trypsins from soil samples
  
 ### The starting sequences
+
+The ready-to-run input is a single multi-FASTA of **2,330,712 protein sequences**, `soil_proteins_renamed.fasta`, available in the Zenodo deposit [https://doi.org/10.5281/zenodo.20720235](https://doi.org/10.5281/zenodo.20720235). The fasta file was downloaded and extracted to be used directly as the Stage 1 input: 
  
-The input was a single multi-FASTA of **2,330,712 protein sequences** available at [MGYS00006774](https://www.ebi.ac.uk/metagenomics/studies/MGYS00006774/overview). After downloading and extracting the fasta file, sequence headers were cut at the first (-NODE-) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
+```bash
+gunzip soil_proteins_renamed.fasta.gz
+```
+ 
+For provenance, these sequences are the predicted CDS from MGnify study [MGYS00006774](https://www.ebi.ac.uk/metagenomics/studies/MGYS00006774/overview). Sequence headers were cut at the first (-NODE-) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
  
 ```
 sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta > soil_proteins.fasta
 ```
+ 
+The `.` in each header was replaced with `_` to match AlphaFold Server job-naming requirements.
+
 ### Stage 1 - filtering sequences
  
 ```bash
