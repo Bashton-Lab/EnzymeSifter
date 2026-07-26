@@ -29,7 +29,7 @@ gunzip soil_proteins_renamed.fasta.gz
 For provenance, these sequences are the predicted CDS from MGnify study [MGYS00006774](https://www.ebi.ac.uk/metagenomics/studies/MGYS00006774/overview). Sequence headers were cut at the first (-NODE-) to avoid very long headers, the gene number was kept so no duplicates appear in the initial dataset. The command used: 
  
 ```
-sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta > soil_proteins.fasta
+sed -E 's/^(>[^-]+)-NODE-[^_]+_([0-9]+).*/\1_\2/' soil_proteins_combined.fasta > soil_proteins_renamed.fasta
 ```
  
 The `.` in each header was replaced with `_` to match AlphaFold Server job-naming requirements.
