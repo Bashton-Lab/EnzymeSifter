@@ -70,9 +70,8 @@ The pipeline runs in two stages with a structure-prediction step (carried out ex
 ## Requirements
 
 - [Conda](https://docs.conda.io/en/latest/miniconda.html)
-- [Snakemake](https://snakemake.readthedocs.io/)
 
-EnzymeSifter creates and manages its own conda environments automatically via `snakemake --use-conda`. You do not need to install any of the underlying tools yourself.
+EnzymeSifter creates and manages its own conda environments automatically. You do not need to install any of the underlying tools yourself.
 
 ---
 
