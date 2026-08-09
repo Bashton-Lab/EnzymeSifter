@@ -104,7 +104,7 @@ On the first invocation of either stage, all of the required tool-specific conda
 ```
 #### Example
 ```bash
-./run_stage1.sh ~/soil_proteins_renamed.fasta -residues GDSGGP -pfam PF00089 -identity 50
+./run_stage1.sh ~/soil_proteins_renamed.fasta -residues GDSGGP -pfam PF00089 -identity 90
 ```
 
 ### Between the stages - structure prediction
@@ -118,7 +118,7 @@ Usage: ./run_stage2.sh /path/to/pdbs [filter options] [clade options]
 ```
 #### Example
 ```bash
-./run_stage2.sh ~/trypsin_pdbs/ -solubility 0.6 -tm 55 -phopt 7:9 -topt 30:45 -clades 11
+./run_stage2.sh ~/trypsin_pdbs/ -solubility 0.69 -phopt 7:10 -topt 30:45 -tm 55 -clades 13
 ```
 
 Users can use -threads n at either stage to specify the number of CPU cores to use. If not used, the tool default to all available cores ($(nproc)).
