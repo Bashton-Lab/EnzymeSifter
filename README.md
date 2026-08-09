@@ -100,7 +100,7 @@ On the first invocation of either stage, all of the required tool-specific conda
 ### Stage 1
 
 ```
-./run_stage1.sh <input> [options]
+Usage: ./run_stage1.sh path/to/fasta [options]
 ```
 #### Example
 ```bash
@@ -114,7 +114,7 @@ Stage 2 needs a directory of PDB files of the filtered sequences.
 ### Stage 2
 
 ```
-Usage: ./run_stage2.sh /path/to/pdbs [filter options] [clade options]
+Usage: ./run_stage2.sh /path/to/pdbs [options]
 ```
 #### Example
 ```bash
