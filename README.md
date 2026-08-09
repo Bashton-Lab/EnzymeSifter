@@ -90,7 +90,7 @@ Make the run scripts executable:
 chmod +x run_stage1.sh run_stage2.sh
 ```
 
-On the first invocation of either stage, Snakemake will build all of the required tool-specific conda environments under `.snakemake/conda/`, and the relevant setup scripts (`scripts/setup_*.sh`) will fetch external databases and model weights into `external/`.
+On the first invocation of either stage, all of the required tool-specific conda environments will be under `.snakemake/conda/`, and the relevant setup scripts (`scripts/setup_*.sh`) will fetch external databases and model weights into `external/`.
 
 ---
 
