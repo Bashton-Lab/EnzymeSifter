@@ -62,7 +62,7 @@ The pipeline runs in two stages with a structure-prediction step (carried out ex
                                           │
                           ┌───────────────▼────────────────┐
                           │  predictions_output/*.tsv      │
-                          │  data/trees/nj_tree_clades.png      │
+                          │  data/trees/nj_tree_clades.png │
                           └────────────────────────────────┘
 ```
 ---
